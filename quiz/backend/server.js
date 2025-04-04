@@ -18,7 +18,8 @@ app.use("/api/questions", questionRoutes);
 
 import quizAttemptRoutes from "./routes/quizAttemptRoutes.js";
 app.use("/api/quiz-attempts", quizAttemptRoutes);
-
+import studentScoreRoutes from "./routes/studentScoreRoutes.js";
+app.use("/api/v1/student-score", studentScoreRoutes);
 // Connect to MongoDB only if not in test mode
 if (process.env.NODE_ENV !== "test") {
   mongoose

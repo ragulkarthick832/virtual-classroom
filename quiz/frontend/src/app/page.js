@@ -22,6 +22,13 @@ export default function Home() {
         >
           Student
         </Link>
+         {/* Student Future Scope Button */}
+         <Link
+          href="/student/future-scope"
+          className="bg-purple-600 text-white px-6 py-3 rounded text-lg"
+        >
+          Student Future Scope
+        </Link>
       </div>
     </main>
   );
