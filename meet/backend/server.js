@@ -15,6 +15,7 @@ const io = new Server(server, {
 });
 
 let users = {}; // Stores connected users and their socket IDs
+let raisedHands = []; // Track which users have raised their hands
 
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
@@ -38,6 +39,9 @@ io.on("connection", (socket) => {
     // Notify other participants about the new user
     socket.broadcast.emit("new-user", rollNumber);
 
+    // Send current raised hands to the new user
+    socket.emit("update-raised-hands", raisedHands);
+
     callback({ success: true });
   });
 
@@ -46,7 +50,7 @@ io.on("connection", (socket) => {
     if (users[to]) {
       io.to(users[to]).emit("offer", { from: socket.rollNumber, offer });
     } else {
-      console.log(`User ${to} not found`);
+      console.log("User ${to} not found");
     }
   });
 
@@ -55,7 +59,7 @@ io.on("connection", (socket) => {
     if (users[to]) {
       io.to(users[to]).emit("answer", { from: socket.rollNumber, answer });
     } else {
-      console.log(`User ${to} not found`);
+      console.log("User ${to} not found");
     }
   });
 
@@ -64,7 +68,7 @@ io.on("connection", (socket) => {
     if (users[to]) {
       io.to(users[to]).emit("ice-candidate", { from: socket.rollNumber, candidate });
     } else {
-      console.log(`User ${to} not found`);
+      console.log("User ${to} not found");
     }
   });
 
@@ -73,12 +77,41 @@ io.on("connection", (socket) => {
     io.emit("chat-message", msg);
   });
 
+  // Handle whiteboard drawing events
+  socket.on("draw", (data) => {
+    // Broadcast drawing data to all other participants
+    socket.broadcast.emit("draw", data);
+  });
+
+  // Handle hand raise
+  socket.on("raise-hand", (rollNumber) => {
+    if (!raisedHands.includes(rollNumber)) {
+      raisedHands.push(rollNumber);
+      io.emit("hand-raised", rollNumber);
+    }
+  });
+
+  // Handle hand lower
+  socket.on("lower-hand", (rollNumber) => {
+    raisedHands = raisedHands.filter(id => id !== rollNumber);
+    io.emit("hand-lowered", rollNumber);
+  });
+
   // Handle user disconnection
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
     if (socket.rollNumber) {
+      // Remove from users list
       delete users[socket.rollNumber];
-      io.emit("update-participants", Object.keys(users)); // Notify remaining participants
+      
+      // Remove from raised hands if they had raised hand
+      if (raisedHands.includes(socket.rollNumber)) {
+        raisedHands = raisedHands.filter(id => id !== socket.rollNumber);
+        io.emit("hand-lowered", socket.rollNumber);
+      }
+      
+      // Notify remaining participants
+      io.emit("update-participants", Object.keys(users));
     }
   });
 });
