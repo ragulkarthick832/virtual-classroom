@@ -29,6 +29,12 @@ export default function Home() {
         >
           Student Future Scope
         </Link>
+        <Link
+          href="/teacher/future-scope"
+          className="bg-red-600 text-white px-6 py-3 rounded text-lg"
+        >
+          Upload Future Scope
+        </Link>
       </div>
     </main>
   );

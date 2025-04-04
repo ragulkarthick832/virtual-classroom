@@ -57,7 +57,7 @@ export default function Sidebar({
             </button>
           ))}
           
-          {/* New Button for Student Link */}
+          {/* New Buttons */}
           <a
             href="http://localhost:3005/student"
             target="_blank"
@@ -65,6 +65,15 @@ export default function Sidebar({
             className="flex items-center gap-3 p-3 rounded-lg w-full text-left text-lg transition duration-200 text-gray-300 bg-[#222539] hover:bg-[#4C4F6B]"
           >
             QUIZ
+          </a>
+          
+          <a
+            href="http://localhost:3005/student/future-scope"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 p-3 rounded-lg w-full text-left text-lg transition duration-200 text-gray-300 bg-[#222539] hover:bg-[#4C4F6B]"
+          >
+            RECOMMENDATION
           </a>
         </div>
       </div>
@@ -75,28 +84,24 @@ export default function Sidebar({
           Courses
         </h2>
         <div className="flex flex-col gap-2">
-        <div>
-  {courses && courses.length > 0 ? (
-    courses.map((course) => (
-      <div
-        key={course._id}
-        className={`flex items-center space-x-2 p-2 rounded cursor-pointer ${
-          selectedCourse === course.title ? "bg-[#25273D]" : ""
-        }`}
-        onClick={() => handleCourseClick(course.title)}
-      >
-        <BookOpen className="w-5 h-5 text-white" />
-        <span>{course.title}</span>
-      </div>
-    ))
-  ) : (
-    <div className="text-gray-500">No registered courses found.</div>
-  )}
-</div>
-
+          {courses && courses.length > 0 ? (
+            courses.map((course) => (
+              <div
+                key={course._id}
+                className={`flex items-center space-x-2 p-2 rounded cursor-pointer ${
+                  selectedCourse === course.title ? "bg-[#25273D]" : ""
+                }`}
+                onClick={() => handleCourseClick(course.title)}
+              >
+                <BookOpen className="w-5 h-5 text-white" />
+                <span>{course.title}</span>
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-500">No registered courses found.</div>
+          )}
         </div>
       </div>
     </div>
   );
-
 }

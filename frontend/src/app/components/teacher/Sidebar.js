@@ -63,7 +63,15 @@ export default function Sidebar({
         >
           QUIZ
         </a>
-
+        {/* New Button for Upload Marks */}
+        <a
+          href="http://localhost:3005/teacher/future-scope"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 p-3 rounded-lg w-full text-left text-lg transition duration-200 text-gray-300 bg-[#222539] hover:bg-[#4C4F6B]"
+        >
+          Upload Marks
+        </a>
         </div>
       </div>
 
